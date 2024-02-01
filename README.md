@@ -8,3 +8,6 @@
  - you can see database with mongoCompass (if already installed) via mongodb://localhost:27017/PMA
  - admin email : admin@mail.com   
  - admin password : admin   
+
+ NOTE : 
+ Backend may fail, If it fails , restart it again via Docker Desktop (if already installed)
