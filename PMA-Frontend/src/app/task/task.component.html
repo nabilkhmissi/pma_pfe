@@ -1,0 +1,271 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="'My Tasks'" [items]="['Home']" [active_item]="'All Tasks'">
+            </app-breadcrumb>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="responsive_table">
+                            <div class="materialTableHeader">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <ul class="header-buttons-left ms-0">   
+                                            <li class="tbl-title">
+                                                <h2> Tasks</h2>
+
+                                            </li>
+                                            <li class="tbl-search-box">
+                                                <label for="search-input"><i
+                                                        class="material-icons search-icon">search</i></label>
+                                                <input placeholder="Search" type="text" (keyup)="applyfilter($event)"
+                                                    [(ngModel)]="filter" class="browser-default search-field"
+                                                    aria-label="Search box">
+                                            </li>
+                                            <li class="tbl-header-btn">
+                                                <div class="m-l-10" matTooltip="ADD">
+                                                    <button mat-mini-fab color="primary" (click)="addNew()">
+                                                        <mat-icon class="col-white">add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                            <li class="tbl-header-btn">
+                                                <div class="m-l-10" matTooltip="REFRESH">
+                                                    <button mat-mini-fab color="primary" (click)="refresh()">
+                                                        <mat-icon class="col-white">refresh</mat-icon>
+                                                    </button>
+
+                                                </div>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="header">
+                                            <select class="year-select" (change)="handleProjectSelect($event)">
+                                                <option value="">All projects</option>
+                                                <option *ngFor="let item of Allprojects" [value]="item._id">{{ item.Projectname | ShortPipe }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <mat-table #table matTableExporter [dataSource]="dataSource" matSort class="mat-cell"
+                                #exporter="matTableExporter">
+                                <ng-container matColumnDef="select">
+                                    <mat-header-cell *matHeaderCellDef [ngClass]="'tbl-col-width-per-6'">
+                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                            [checked]="selection.hasValue() && isAllSelected()"
+                                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                            [ngClass]="'tbl-checkbox'">
+                                        </mat-checkbox>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                            (change)="$event ? selection.toggle(row) : null"
+                                            [checked]="selection.isSelected(row)" [ngClass]="'tbl-checkbox'">
+                                        </mat-checkbox>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Title">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{row.Title}}</mat-cell>
+                                </ng-container>
+                                
+                                <ng-container matColumnDef="Project">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Project</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">{{row.Project.Projectname |ShortPipe}}</mat-cell>
+                                </ng-container>
+                                
+                                <ng-container matColumnDef="Status">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Status
+                                    </mat-header-cell>
+                                    <mat-cell mat-cell *matCellDef="let row">
+                                        <div *ngIf="row.Status=='Pending'">
+                                            <span class="badge badge-solid-orange">
+                                                {{row.Status}}</span>
+                                        </div>
+                                        <div *ngIf="row.Status=='Open'">
+
+                                            <span class="badge badge-solid-red">
+                                                {{row.Status}}</span>
+                                        </div>
+                                        <div *ngIf="row.Status=='Closed'">
+                                            <span class="badge badge-solid-green">
+                                                {{row.Status}}</span>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Priority">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Priority
+                                    </mat-header-cell>
+                                    <mat-cell mat-cell *matCellDef="let row">
+                                        <div *ngIf="row.Priority=='Low'">
+                                            <span class="badge badge-pill badge-primary col-green">
+                                                {{row.Priority}}</span>
+                                        </div>
+                                        <div *ngIf="row.Priority=='Medium'">
+                                            <span class="badge badge-pill badge-primary col-blue">
+                                                {{row.Priority}}</span>
+                                        </div>
+                                        <div *ngIf="row.Priority=='High'">
+                                            <span class="badge badge-pill badge-primary col-red">
+                                                {{row.Priority}}</span>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+                               
+                                <ng-container matColumnDef="Executor">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Executor</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">
+                                        <ul class="list-unstyled order-list">
+                                            <li *ngFor=" let x of row.Executor" class="avatar avatar-sm">
+                                                <img [src]="x.image ?? 'avaat.png'" matTooltip="{{ x.fullName }}"
+                                                    class="rounded-circle" alt="executors-member" />
+                                            </li>
+                                        </ul>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Date">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Started Date</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.StartDate | date: 'MM/dd/yyyy HH:mm'}}</mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Deadline">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Deadline</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.Deadline |date: 'MM/dd/yyyy HH:mm'}}</mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Details">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Details</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> <span class="truncate-text">{{row.Details}}</span>
+                                    </mat-cell>
+                                </ng-container>
+                               
+                                <ng-container matColumnDef="Actions">
+                                    <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                                        <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
+                                            (click)="editCall(row)" class="tbl-action-btn" matTooltip="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
+                                            (click)="deleteItem(i, row)" class="tbl-action-btn" matTooltip="Delete">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editCall(row)"
+                                    [style.cursor]="'pointer'" matRipple>
+                                </mat-row>
+                            </mat-table>
+                            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="card">
+            <div style="padding: 20px;">
+                <div class="row">
+                    <div class="col-1">
+                        <h5>Tasks</h5>
+                    </div>
+                    <div class="col-6">
+                        <mat-spinner *ngIf="loading" style="width: 30px; height: 30px;"></mat-spinner>
+                    </div>
+                    <div class="col-5">
+                        <select class="form-select form-control" (change)="handleProjectSelect($event)">
+                            <option value="">All projects</option>
+                            <option *ngFor="let item of Allprojects" [value]="item._id">{{ item.Projectname |
+                                ShortPipe}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <ng-scrollbar style="height: 400px" visibility="hover">
+                <div class="tableBody">
+                    <div class="responsive_table fix-width-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Task Title</th>
+                                    <th>Executor</th>
+                                    <th>Project title</th>
+                                    <th>Priority</th>
+                                    <th>Progress</th>
+                                    <th>Start Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of tasks">
+                                    <td>{{item.Title | ShortPipe}}</td>
+                                    <td>
+                                        <ul class="list-unstyled order-list">
+                                            <li *ngFor=" let x of item.Executor" class="avatar avatar-sm">
+                                                <img src="{{serverImageUrl}}/{{x.image}}" matTooltip="{{ x.fullName }}"
+                                                    class="rounded-circle" alt="executors-member" />
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td>{{item.Project.Projectname |ShortPipe}}</td>
+                                    <td>
+                                        <div class="badge col-blue" *ngIf="item.Priority=='Medium' ">Medium</div>
+                                        <div class="badge col-red" *ngIf="item.Priority=='High'">High</div>
+                                        <div class="badge col-green" *ngIf="item.Priority=='Low' ">Low</div>
+                                    </td>
+                                    <td>
+                                        <mat-progress-bar mode="determinate"
+                                            class="progress-xs progress-round sky-progress progress-shadow"
+                                            value="{{item.progress}}">
+                                        </mat-progress-bar>
+                                    </td>
+                                    <td>
+                                        {{item.StartDate | date:"dd/MM/yyyy"}}
+                                    </td>
+                                    <td>
+                                        <div *ngIf="item.Status=='Pending'">
+                                            <span class="badge badge-solid-orange">
+                                                {{item.Status}}</span>
+                                        </div>
+                                        <div *ngIf="item.Status=='Open'">
+
+                                            <span class="badge badge-solid-red">
+                                                {{item.Status}}</span>
+                                        </div>
+                                        <div *ngIf="item.Status=='Closed'">
+                                            <span class="badge badge-solid-green">
+                                                {{item.Status}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
+                                            (click)="editCall(item)" class="tbl-action-btn" matTooltip="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
+                                            (click)="deleteItem(i, item)" class="tbl-action-btn" matTooltip="Delete">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </ng-scrollbar>
+        </div>
+    </div>
+</section>

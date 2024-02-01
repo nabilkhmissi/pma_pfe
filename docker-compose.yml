@@ -1,0 +1,22 @@
+version: '3'
+services:
+  pma:
+    container_name : pma
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  
+  frontend:
+    build: ./PMA-Frontend
+    ports:
+      - 4200:80
+
+  backend:
+   build: ./PMA-Backend
+   ports:
+     - 3002:3002
+   depends_on:
+     - pma

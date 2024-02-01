@@ -1,0 +1,56 @@
+/* You can add global styles to this file, and also import other style files */
+::-webkit-scrollbar {
+    width: 10px;
+    /* Set the width of the scrollbar */
+}
+
+/* Track styles */
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    /* Set the background color of the scrollbar track */
+}
+
+/* Handle styles */
+::-webkit-scrollbar-thumb {
+    height: 40%;
+    background-color: #d0d0d0;
+    /* Set the color of the scrollbar handle */
+    border-radius: 6px;
+    /* Set the border-radius of the scrollbar handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #b2b2b2;
+    /* Change color on hover */
+}
+
+//horizontal scrollbar
+::-webkit-scrollbar:horizontal {
+    height: 6px;
+    /* Set the width of the scrollbar */
+}
+
+/* Track styles */
+::-webkit-scrollbar-track:horizontal {
+    background-color: #f1f1f1;
+    /* Set the background color of the scrollbar track */
+}
+
+/* Handle styles */
+::-webkit-scrollbar-thumb:horizontal {
+    height: 40%;
+    background-color: #d0d0d0;
+    /* Set the color of the scrollbar handle */
+    border-radius: 6px;
+    /* Set the border-radius of the scrollbar handle */
+}
+
+.year-select {
+    border-color: #cdcdcd;
+    background-color: white;
+    color: #616161;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
